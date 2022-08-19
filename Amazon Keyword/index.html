@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@2.7.0/dist/vue.js"></script>
+    <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css"
+    />
+  </head>
+  <body>
+    <div class="mx-auto my-0 w-[50%] h-[50%]" id="root">
+      <button
+        @click="process"
+        class="mdui-ripple mdui-ripple-grey p-2 my-2 text-blue-700 bg-gray-100 rounded-sm"
+      >
+        <i class="mdui-icon material-icons">remove_circle</i> 移除可疑字符
+      </button>
+      <br />
+      <span v-text="tip"></span>
+      <textarea
+        name=""
+        id=""
+        cols="50"
+        rows="20"
+        class="border-2 w-[100%] p-2"
+        v-model="text"
+      ></textarea>
+    </div>
+  </body>
+</html>
+<script>
+  const vm = new Vue({
+    el: "#root",
+    data: {
+      text: "",
+      tip: "",
+    },
+    methods: {
+      process() {
+        let arrText = this.text.split("\n");
+
+        for (let i = 0; i < arrText.length; i++) {
+          for (let str of arrText[i]) {
+            // console.log(str);
+            if (
+              str.charCodeAt() >= "a".charCodeAt() &&
+              str.charCodeAt() <= "z".charCodeAt()
+            ) {
+              console.log(str, "满足条件下标为：", i);
+              arrText.splice(i, 1);
+              break;
+            }
+          }
+
+          this.text = arrText.join("\n");
+          this.tip =
+            "移除成功，请注意是否依旧含有英文单词，或者含有国外的名字，如‘麦克’，‘威尔逊’，‘莎莉’等诸如此类的";
+        }
+      },
+    },
+  });
+</script>
