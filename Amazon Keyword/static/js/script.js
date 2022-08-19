@@ -3,6 +3,7 @@ const vm = new Vue({
   data: {
     // b: "",
     array: [],
+    arrayPool: [],
     process: "还未开始",
     filename: "",
     isProgress: false,
@@ -35,7 +36,7 @@ const vm = new Vue({
       
 
 
-      // this.isProgress = true
+      this.isProgress = true
       let isSync = true // 是否异步调用
       for (let i = "a".charCodeAt(); i <= "z".charCodeAt(); i++) {
         let xmlhttp = new XMLHttpRequest();
@@ -45,9 +46,9 @@ const vm = new Vue({
         xmlhttp.send();
         
         // 回调函数
-        xmlhttp.onreadystatechange = (i) => {
+        xmlhttp.onreadystatechange = () => {
           if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            this.process = String.fromCharCode(i);
+            this.arrayPool.push(i)
             this.array.push(eval("(" + xmlhttp.responseText + ")"));
           }
         };
@@ -57,6 +58,7 @@ const vm = new Vue({
 
     Clear() {
       this.array = []
+      this.arrayPool = []
       // // 消除重复
       // // for(let i = 0; i < this.array.length; i++) {
       // //   this.array[i] = this.array[i].filter(function(item, index, self) {
@@ -136,8 +138,17 @@ const vm = new Vue({
               background: "#fff"
           })
     },
+  },
+  watch: {
+    arrayPool: {
+      immediate: true,
+      handler() {
+        if(this.arrayPool.length == "26") {
+          this.isProgress = false
+        }
+      }
+    }
   }
-
 });
 
 
