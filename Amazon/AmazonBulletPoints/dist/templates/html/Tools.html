@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link
+  rel="stylesheet"
+  href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css"
+/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/vue@2.7.0/dist/vue.js"></script>
+<script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+<script src="https://cdn.bootcss.com/jspdf/1.5.3/jspdf.debug.js"></script>
+<script src="https://cdn.bootcss.com/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+</head>
+<body class="p-10">
+  <div id="root">
+    <h2 class="text-4xl">厘米 <span class="text-lg">换英寸</span></h2>
+    <div class="mdui-divider-dark"></div>
+    <div class="inputSection flex">
+      <div class="mdui-textfield mdui-textfield-floating-label mr-10">
+        <label class="mdui-textfield-label">长(CM)</label>
+        <input v-model="length" class="mdui-textfield-input outline-none w-20" type="text"/>
+      </div>
+
+      <div class="mdui-textfield mdui-textfield-floating-label  mr-10">
+        <label class="mdui-textfield-label">宽(CM)</label>
+        <input v-model="width" class="mdui-textfield-input outline-none w-20" type="text"/>
+      </div>
+
+      <div class="mdui-textfield mdui-textfield-floating-label  mr-10">
+        <label class="mdui-textfield-label">高(CM)</label>
+        <input v-model="height" class="mdui-textfield-input outline-none w-20" type="text"/>
+      </div>
+    </div>
+    <button @click="cm_calculate" class="p-1 mdui-ripple mdui-btn-block bg-blue-600 text-white">计算</button>
+    <strong>结果：</strong><h3 class="text-4xl p-5 bg-gray-100" v-html="inch_result"></h3>
+  </div>
+</body>
+</html>
+
+<script>
+  new Vue({
+    el: "#root",
+    data: {
+      inch_result: "",
+      length: 0,
+      width: 0,
+      height: 0
+    },
+    methods: {
+      cm_calculate() {
+        if(this.length == 0 && this.width == 0  && this.height == 0){ return }
+        // alert(1)
+        let inch = 0.3937008;
+        let length = this.length * inch;
+        let height = this.height * inch;
+        let width = this.width * inch;
+
+        result = length.toFixed(2) + "(L) × " + width.toFixed(2)  + "(W) × " + height.toFixed(2) + "(H)";
+
+        this.inch_result = "Product Size: " + result + "<br/> <br/>" + 
+                           "Package Size: " + result + "<br/>"
+
+      }
+    }
+  })
+</script>

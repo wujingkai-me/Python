@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="static/css/style.css" />
+    <!-- <link rel="stylesheet" href="../../static/css/style.css" /> -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@2.7.0/dist/vue.js"></script>
+    <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+    <script src="https://cdn.bootcss.com/jspdf/1.5.3/jspdf.debug.js"></script>
+    <script src="https://cdn.bootcss.com/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+  </head>
+  <body>
+    {% raw %}
+    <div id="root" class="my-0 mx-auto w-[80%]">
+      {% endraw %}
+      <a href="/Format">
+        <button  class="mdui-btn-block mdui-ripple px-4 py-1 bg-blue-600 mb-3 rounded-md border-gray-200 text-white">
+          格式化
+        </button>
+      </a>
+
+      <a href="/English">
+        <button  class="mdui-btn-block mdui-ripple px-4 py-1 bg-blue-600 mb-3 rounded-md border-gray-200 text-white">
+          移除可疑字符
+        </button>
+      </a>
+
+      <a href="/Tools">
+        <button  class="mdui-btn-block mdui-ripple px-4 py-1 bg-blue-600 mb-3 rounded-md border-gray-200 text-white">
+          汇率
+        </button>
+      </a>
+
+      <a href="/bullet">
+        <button  class="mdui-btn-block mdui-ripple px-4 py-1 bg-blue-600 mb-3 rounded-md border-gray-200 text-white">
+          五点描述
+        </button>
+      </a>
+      {% raw %}
+      <!-- {{ process }} -->
+      <div class="mdui-textfield mdui-textfield-floating-label">
+        <label for="keyword" class="mdui-textfield-label"
+          >Input your KEYWORD</label
+        >
+        <input
+          type="text"
+          id="keyword"
+          class="border-2 rounded-sm outline-none pl-2 mdui-textfield-input"
+        />
+      </div>
+      <button
+        id="btn"
+        @click="getData"
+        class="mdui-ripple mdui-ripple-black bg-gray-100 text-blue-600 outline-none border-0 px-3 py-1 rounded-sm"
+      >
+        <i class="mdui-icon material-icons text-2xl">mouse</i>
+        Click me
+      </button>
+      <!-- <hr> -->
+      <!-- <input
+        type="text"
+        v-model="filter.filterElement"
+        placeholder="Filter element"
+        class="border-2 rounded-sm outline-none pl-2"
+      /> -->
+      <button
+        id="btn-start"
+        @click="Clear"
+        class="mdui-ripple mdui-ripple-black bg-gray-100 outline-none border-0 px-3 py-1 rounded-sm"
+      >
+        <i class="mdui-icon material-icons text-2xl">clear_all</i>
+        Clear
+      </button>
+
+      <!-- <div class="mdui-divider my-2"></div> -->
+
+      <span>选择您希望获取关键字的国家：</span>
+      <select name="" class="countrySelect mdui-select">
+        <option value="" selected>英国</option>
+        <option value="">法国</option>
+        <option value="">德国</option>
+        <option value="">意大利</option>
+        <option value="">西班牙</option>
+      </select>
+      <div class="mdui-progress" v-show="isProgress">
+        <div class="mdui-progress-indeterminate"></div>
+      </div>
+      <!-- <div class="mdui-divider my-2"></div> -->
+
+      <!-- <button
+        @click="Download"
+        class="mdui-ripple-black mdui-color-amber-400 outline-none border-0 px-2 py-1 rounded-sm"
+      >
+        Download
+      </button> -->
+      <!-- <input
+        type="text"
+        class="w-40 pl-3 border-2 rounded-sm"
+        placeholder="File name: "
+        v-model="filename"
+      /> -->
+      <div id="grid">
+        <table
+          v-if="isEmpty(array)"
+          border="1"
+          cellspacing="0"
+          cellpadding="10"
+          width="100%"
+        >
+          <thead>
+            <th>关键词</th>
+            <th>搜索量</th>
+          </thead>
+          <template v-for="items of array">
+            <tr
+              v-for="item of items"
+              class="capitalize border-b-gray-200 border-b-2"
+            >
+              <td class="text-center">{{ item[0] }}</td>
+              <td class="text-center">{{ item[1] }}</td>
+            </tr>
+          </template>
+        </table>
+        <!-- </template> -->
+      </div>
+    </div>
+    {% endraw %}
+  </body>
+</html>
+<script type="application/javascript" src="static/js/script.js"></script>
