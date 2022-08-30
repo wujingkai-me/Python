@@ -1,10 +1,156 @@
+{% raw %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@2.7.0/dist/vue.js"></script>
+    <!--script src="../../static/js/vue.js"></script-->
+    <!-- <script src="static/js/vue.js"></script> -->
+    <script src="../../static/js/axios.js"></script>
+    <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css"
+    />
 </head>
 <body>
-$END$
+    <div id="root" class="p-20 flex">
+        <div class="root__search w-[60%] border-r-2 ">
+            <div class="mb-5">
+                <input type="text" v-model="searchText" class="root__search-input pl-3 outline-none border-2 w-[80%] h-10 rounded-2xl transition-all focus:border-blue-600" placeholder="输入您的关键词"/>
+                <button @click="search" class="mdui-ripple root__search-button bg-blue-600 text-white px-2 rounded-lg py-3 w-[18%] transition-all hover:-translate-y-2">
+                    <i class="mdui-icon material-icons">youtube_searched_for</i> 
+                    开始筛选
+                </button>
+            </div>
+
+            <div class="w-full bg-gray-50 p-5 rounded-2xl">
+                <ul>
+                    <li class="py-3" style="border-bottom: 1px solid lightgrey" v-for="item of showSearchContent[0]">{{ item }}</li>
+                </ul>
+            </div>
+        </div>
+        <div ref="root_class" class="root__classification w-[40%] box-content p-5">
+            <h3 class="text-2xl mb-2">分类选择</h3>
+            <button @click="selectAll" class="mdui-ripple px-4 py-1 border-[1px] rounded-md border-gray-200 text-blue-600"  >
+                <i class=" mdui-icon material-icons">select_all</i> 
+                全选 
+            </button> 
+            <button @click ="reserve"   class="mdui-ripple px-4 py-1 border-[1px] rounded-md border-gray-200 text-blue-600">
+                <i class=" mdui-icon material-icons">all_inclusive</i> 
+                反选
+            </button>
+            <p class="my-2"></p>
+            <div ref="templates" class="templates">
+                <template v-for="type of types"><input type="checkbox" v-bind:name="type.name" checked> <span class="mr-2">{{ type.content }}</span></template>
+            </div>
+        </div>
+
+
+    </div>
 </body>
 </html>
+<script type="application/javascript">
+    const  vm = new Vue({
+        el: "#root",
+        data: {
+            data__: "",
+            searchText: "",
+            searchContent: [],
+            showSearchContent: []
+        },
+        methods: {
+            search(){
+
+                this.searchContent = []
+                this.showSearchContent = []
+
+                let dom = this.$refs.root_class;
+                let inputs = dom.getElementsByTagName("input");
+                let checkedInput = [];
+
+                // 找到选择的input
+                for(let input of inputs){
+                    if(input.checked){
+                        checkedInput.push(input)
+                    }
+                }
+
+                // 加入待搜素文本
+                self__searchContent = []
+                for(let checked of checkedInput){
+                    let contents = this.data__.data[checked.name].content
+
+                    for(let content of contents){
+                        self__searchContent.push(content)
+                    }
+                }
+
+                this.$set(this.searchContent, 0, self__searchContent)
+
+                console.log("添加完成");
+
+                // 开始搜素
+               let result = this.searchContent[0].filter( (value) => {
+                   // console.log(this.searchText)
+                  console.log(value, value.match(this.searchText) != "")
+                    return value.match(this.searchText) != null;
+                })
+                console.log(result)
+                this.$set(this.showSearchContent, 0, result)
+
+            },
+            generateAjax(requestUrl, isSync, func){
+                let xmlhttp = new XMLHttpRequest();
+
+                xmlhttp.open("GET", requestUrl, isSync);
+                xmlhttp.send();
+
+                // 回调函数
+                xmlhttp.onreadystatechange = () => {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        // this.array.push(eval("(" + xmlhttp.responseText + ")"));
+                        func();
+                    }
+                };
+            },
+            reserve(){
+                let inputs = this.$refs.templates.querySelectorAll("input")
+                for(let input of inputs){
+                    input.checked = !(input.checked)
+                }
+            },
+            selectAll(){
+                let inputs = this.$refs.templates.querySelectorAll("input")
+                for(let input of inputs){
+                    input.checked = true
+                }
+            }
+        },
+        computed: {
+            types() {
+                //console.log("111===>",this.data__)
+                let arr = []
+                for(item in this.data__.data){
+                    console.log(item)
+                    arr.push({
+                        name: item,
+                        content: this.data__.data[item].CN
+                    })
+                }
+                return arr
+            }
+        },
+        mounted(){
+            axios.get('/load_cache')
+                .then(response => {
+                    this.data__ = response
+                })
+                .catch(function (error) { // 请求失败处理
+                    console.log(error);
+                });
+        }
+    })
+</script>
+
+{% endraw %}

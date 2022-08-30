@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@2.7.0/dist/vue.js"></script>
+    <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css"
+    />
+  </head>
+  <body>
+    <div id="root" class="flex">
+      <div class="nav w-[20%] border-r-2" ref="nav">
+        <div class="mdui-ripple h-10 mt-3 leading-10 text-center text-black bg-gray-50 cursor-pointer" v-for="html of htmls" @click="Click">
+          <span v-bind:url="html.url" class="block w-full h-full">{{ html.text }}</span>
+        </div>
+      </div>
+      <iframe width="80%" class="h-[100vh]" v-bind:src="iframeUrl" frameborder="0"></iframe>
+    </div>
+  </body>
+</html>
+
+<script>
+  new Vue({
+    el: "#root",
+    data: {
+      htmls: [
+        {url: "Format.html", text: "文案格式化"},
+        {url: "EnglishRemove.html", text: "去除可疑字符"},
+        {url: "Tools.html", text: "工具箱"},
+      ],
+      iframeUrl: "Tools.html"
+    },
+    methods: {
+      Click(e) {
+        let divs = this.$refs.nav.getElementsByTagName("div")
+        for(let i = 0; i < divs.length; i ++){
+          divs[i].className = divs[i].className.replace("bg-blue-600", "bg-bg-gray-50")
+          divs[i].className = divs[i].className.replace("text-white", "text-block")
+        }
+        this.iframeUrl = e.target.attributes["url"].nodeValue
+        e.target.parentNode.className += " bg-blue-600 text-white"
+      }
+    }
+  });
+</script>
