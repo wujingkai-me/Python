@@ -37,6 +37,23 @@
     </div>
     <button @click="cm_calculate" class="p-1 mdui-ripple mdui-btn-block bg-blue-600 text-white">计算</button>
     <strong>结果：</strong><h3 class="text-4xl p-5 bg-gray-100" v-html="inch_result"></h3>
+    <!-- ------------------------------------------------------------------------------------ -->
+    <!-- ------------------------------------------------------------------------------------ -->
+    <!-- ------------------------------------------------------------------------------------ -->
+    <!-- ------------------------------------------------------------------------------------ -->
+    <!-- ------------------------------------------------------------------------------------ -->
+    <h2 class="text-4xl mt-4">变体 <span class="text-lg">迭代器</span></h2>
+    <div class="mdui-divider-dark"></div>
+
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <label class="mdui-textfield-label">变体开始</label>
+      <input v-model="SKU" class="mdui-textfield-input outline-none w-20" type="text"/>
+    </div>
+
+    <input v-model="SKU_num" type="number" min="0" placeholder="迭代几次" class="outline-none mt-2">
+    <br>
+    <textarea class="text-4xl p-5 w-full flex-wrap h-[400px]" v-model="gener"></textarea>
+    <hr>
   </div>
 </body>
 </html>
@@ -48,7 +65,9 @@
       inch_result: "",
       length: 0,
       width: 0,
-      height: 0
+      height: 0,
+      SKU: "",
+      SKU_num: 0
     },
     methods: {
       cm_calculate() {
@@ -64,6 +83,16 @@
         this.inch_result = "Product Size: " + result + "<br/> <br/>" + 
                            "Package Size: " + result + "<br/>"
 
+      }
+    },
+    computed: {
+      gener(){
+        let s = ""
+        for(let i = 1; i <= this.SKU_num; i ++) {
+          s += this.SKU + i + ","
+        }
+
+        return s
       }
     }
   })
