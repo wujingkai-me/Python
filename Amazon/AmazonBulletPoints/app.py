@@ -1,8 +1,10 @@
 import json
+import time
 import Amazon
 import os
 from flask import Flask
-from flask import render_template
+from flask import render_template, request
+
 
 import requests as __requests
 import re as __re
@@ -127,6 +129,28 @@ def Tools():
     return render_template("html/tools.html")
 
 
+@app.route("/shangchuan")
+def shangchuan():
+    paths = os.listdir("static/bullets/")
+    print(paths)
+    return render_template("html/Download.html", path=paths)
+
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        savePath = "static/bullets/"
+        f = request.files['file']
+        if "__" not in f.filename:
+            return "file uploaded error! Could file name is incorrectly !"
+        f.save(savePath + f.filename)
+        gcc()
+        writeLOG("UPLOAD", path="static/bullets/" + f.filename)
+        return 'file uploaded successfully'
+    else:
+        return render_template('upload.html')
+
+
 @app.route("/getkeyword/<keyword>/<countryName>", methods=["get"])
 @app.route("/getkeyword")
 def getKeyword(keyword="", countryName="AMAZON_CO_UK"):
@@ -161,6 +185,24 @@ def Load_cache():
         f.close()
 
     return data
+
+
+def writeLOG(operate, path):
+    f = open("static/DEL.LOG", "a+")
+    clock = str(time.localtime().tm_year) + " " + str(time.localtime().tm_mon) + " " + \
+        str(time.localtime().tm_hour) + ":" + str(time.localtime().tm_min) + \
+        ":" + str(time.localtime().tm_sec)
+    f.write("[" + operate + "]\t" + path + "\t" + clock)
+    f.close()
+
+
+def gcc():
+    paths = os.listdir("static/bullets/")
+    for path in paths:
+        sizes = os.path.getsize("static/bullets/" + path)
+        if sizes <= 4000:
+            os.system("del " + ".\\static\\bullets\\" + path)
+            writeLOG("DELETE", "static/bullets/" + path)
 
 
 if __name__ == "__main__":

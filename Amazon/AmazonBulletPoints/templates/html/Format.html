@@ -18,29 +18,26 @@
   <body class="p-[60px]">
     {% raw %}
     <div id="root">
-      <a href="/Format">
-        <button  class="mdui-btn-block mdui-ripple px-4 py-1 bg-blue-600 mb-3 rounded-md border-gray-200 text-white">
-          格式化
-        </button>
-      </a>
-
-      <a href="/English">
-        <button  class="mdui-btn-block mdui-ripple px-4 py-1 bg-blue-600 mb-3 rounded-md border-gray-200 text-white">
-          移除可疑字符
-        </button>
-      </a>
-
-      <a href="/Tools">
-        <button  class="mdui-btn-block mdui-ripple px-4 py-1 bg-blue-600 mb-3 rounded-md border-gray-200 text-white">
-          汇率
-        </button>
-      </a>
-
-      <a href="/bullet">
-        <button  class="mdui-btn-block mdui-ripple px-4 py-1 bg-blue-600 mb-3 rounded-md border-gray-200 text-white">
-          五点描述
-        </button>
-      </a>
+      <div class="fixed top-2 left-[30vw] h-8">
+        <ul class="flex flex-1">
+          <li class="px-3 py-2 mr-2 rounded-md"> <a class="hover:border-b-2 hover:border-b-orange-500 text-gray-700 block w-full h-full" href="/Format">
+            <i class="mdui-icon material-icons">format_color_text</i>
+            格式化
+          </a> </li>
+          <li class="px-3 py-2 mr-2 rounded-md"> <a class="hover:border-b-2 hover:border-b-orange-500 text-gray-700 block w-full h-full" href="/English">
+            <i class="mdui-icon material-icons">announcement</i>
+            英语
+          </a> </li>
+          <li class="px-3 py-2 mr-2 rounded-md"> <a class="hover:border-b-2 hover:border-b-orange-500 text-gray-700 block w-full h-full" href="/Tools">
+            <i class="mdui-icon material-icons">pan_tool</i>
+            工具
+          </a> </li>
+          <li class="px-3 py-2 mr-2 rounded-md"> <a class="hover:border-b-2 hover:border-b-orange-500 text-gray-700 block w-full h-full" href="/bullet">
+            <i class="mdui-icon material-icons">location_searching</i>
+            五点描述搜素
+          </a> </li>
+        </ul>
+      </div>
       <div class="title_section mb-5">
         <div class="flex flex-1 border-2 px-2 rounded-lg">
           <input
