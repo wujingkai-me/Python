@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>致远广告-Amazon工具</title>
+    <link rel="shortcut icon" href="../../static/images/LOGO.ico" type="image/x-icon">
+  <link
+  rel="stylesheet"
+  href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css"
+/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/vue@2.7.0/dist/vue.js"></script>
+<script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+<script src="https://cdn.bootcss.com/jspdf/1.5.3/jspdf.debug.js"></script>
+<script src="https://cdn.bootcss.com/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+</head>
+<body class="p-10">
+  <div id="root">
+    <h2 class="text-4xl">厘米 <span class="text-lg">换英寸</span></h2>
+    <div class="mdui-divider-dark"></div>
+    <div class="inputSection flex">
+      <div class="mdui-textfield mdui-textfield-floating-label mr-10">
+        <label class="mdui-textfield-label">长(CM)</label>
+        <input v-model="length" class="mdui-textfield-input outline-none w-20" type="text"/>
+      </div>
+
+      <div class="mdui-textfield mdui-textfield-floating-label  mr-10">
+        <label class="mdui-textfield-label">宽(CM)</label>
+        <input v-model="width" class="mdui-textfield-input outline-none w-20" type="text"/>
+      </div>
+
+      <div class="mdui-textfield mdui-textfield-floating-label  mr-10">
+        <label class="mdui-textfield-label">高(CM)</label>
+        <input v-model="height" class="mdui-textfield-input outline-none w-20" type="text"/>
+      </div>
+    </div>
+    <button @click="cm_calculate" class="p-1 mdui-ripple mdui-btn-block bg-blue-600 text-white">计算</button>
+    <strong>结果：</strong><h3 class="text-4xl p-5 bg-gray-100" v-html="inch_result"></h3>
+    <!-- ------------------------------------------------------------------------------------ -->
+    <!-- ------------------------------------------------------------------------------------ -->
+    <!-- ------------------------------------------------------------------------------------ -->
+    <!-- ------------------------------------------------------------------------------------ -->
+    <!-- ------------------------------------------------------------------------------------ -->
+    <h2 class="text-4xl mt-4">变体 <span class="text-lg">迭代器</span></h2>
+    <div class="mdui-divider-dark"></div>
+
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <label class="mdui-textfield-label">变体开始</label>
+      <input v-model="SKU" class="mdui-textfield-input outline-none w-20" type="text"/>
+    </div>
+
+    <input v-model="SKU_num" type="number" min="0" placeholder="迭代几次" class="outline-none mt-2">
+    <br>
+    <textarea class="text-4xl p-5 w-full flex-wrap h-[400px]" v-model="gener"></textarea>
+    <hr>
+
+    <h1>获取图片</h1>
+    <code>
+      javascript:
+      var imgs = document.querySelectorAll("img");
+      var fitImages = [];
+
+      for(var i = 0; i < imgs.length; i ++) {
+        if(imgs[i].naturalWidth >= 600 && imgs[i].naturalHeight >= 600) {
+          fitImages.push(imgs[i].src);
+        }
+      }
+
+      var f = window.open("1.html");
+      for(var img of fitImages){
+        f.document.write("< img src='"+ img +"'> < br />");
+      }
+    </code>
+
+    <h1>获取五点描述</h1>
+    <code>
+      javascript:var w = window.open("feture.html"); var feturesItems = document.querySelectorAll(".feature-item-p");  for(var item of feturesItems){     var p = item.querySelectorAll("p");     for(var fetures of p){         w.document.write(fetures.innerText.trim() + "<br/>");     } }
+    </code>
+  </div>
+</body>
+</html>
+
+<script>
+  new Vue({
+    el: "#root",
+    data: {
+      inch_result: "",
+      length: 0,
+      width: 0,
+      height: 0,
+      SKU: "",
+      SKU_num: 0
+    },
+    methods: {
+      cm_calculate() {
+        if(this.length == 0 && this.width == 0  && this.height == 0){ return }
+        // alert(1)
+        let inch = 0.3937008;
+        let length = this.length * inch;
+        let height = this.height * inch;
+        let width = this.width * inch;
+
+        result = length.toFixed(2) + "(L) × " + width.toFixed(2)  + "(W) × " + height.toFixed(2) + "(H)";
+
+        this.inch_result = "Product Size: " + result + "<br/> <br/>" + 
+                           "Package Size: " + result + "<br/>"
+
+      }
+    },
+    computed: {
+      gener(){
+        let s = ""
+        for(let i = 1; i <= this.SKU_num; i ++) {
+          s += this.SKU + i + ","
+        }
+
+        return s
+      }
+    }
+  })
+</script>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>致远广告-Amazon工具</title>
+    <link rel="shortcut icon" href="../../static/images/LOGO.ico" type="image/x-icon">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../../static/js/axios.js"></script>
+  <script src="https://unpkg.com/vue@2.7.0/dist/vue.js"></script>
+  <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css"
+  />
+</head>
+<body class="p-40">
+  <div id="root" class="w-[60%] mx-auto">
+    <form action="/upload" method="POST" enctype="multipart/form-data" class="relative">
+      <!-- <div class="absolute top-0 left-0">添加文件</div> -->
+      <input @click="get" type="file" ref="file" name="file" accept=".txt"/>
+      <input class="mdui-btn w-80 h-full bg-gray-100" type="submit" value="上传"/>
+    </form>
+
+    <!-- <ul class="mt-6">
+      <li class="flex">
+        <div class="w-[50%] text-center py-5 text-2xl">文件名</div>
+        <div class="w-[50%] text-center py-5 text-2xl">状态</div>
+      </li>
+    </ul> -->
+
+    <h2 class="text-3xl py-3 px-2">已经存在的文件</h2>
+    <ul>
+    {% for p in path %}
+      <li class="pl-3 leading-6">✅ {{p}}</li>
+    {% endfor %}
+  </ul>
+  </div>
+</body>
+</html>
+
+<script>
+  new Vue({
+    el: "#root",
+    data: {
+      filename: ""
+    },
+    methods: {
+    }
+  })
+</script>

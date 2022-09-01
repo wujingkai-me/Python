@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>致远广告-Amazon工具</title>
+    <link rel="shortcut icon" href="../../static/images/LOGO.ico" type="image/x-icon">
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/vue@2.7.0/dist/vue.js"></script>
+    <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+    <script src="https://cdn.bootcss.com/jspdf/1.5.3/jspdf.debug.js"></script>
+    <script src="https://cdn.bootcss.com/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+  </head>
+  <body class="p-[60px]">
+    {% raw %}
+    <div id="root">
+      <div class="fixed top-2 left-[30vw] h-8">
+        <ul class="flex flex-1">
+          <li class="px-3 py-2 mr-2 rounded-md"> <a class="hover:border-b-2 hover:border-b-orange-500 text-gray-700 block w-full h-full" href="/Format">
+            <i class="mdui-icon material-icons">format_color_text</i>
+            格式化
+          </a> </li>
+          <li class="px-3 py-2 mr-2 rounded-md"> <a class="hover:border-b-2 hover:border-b-orange-500 text-gray-700 block w-full h-full" href="/English">
+            <i class="mdui-icon material-icons">announcement</i>
+            英语
+          </a> </li>
+          <li class="px-3 py-2 mr-2 rounded-md"> <a class="hover:border-b-2 hover:border-b-orange-500 text-gray-700 block w-full h-full" href="/Tools">
+            <i class="mdui-icon material-icons">pan_tool</i>
+            工具
+          </a> </li>
+          <li class="px-3 py-2 mr-2 rounded-md"> <a class="hover:border-b-2 hover:border-b-orange-500 text-gray-700 block w-full h-full" href="/bullet">
+            <i class="mdui-icon material-icons">location_searching</i>
+            五点描述搜素
+          </a> </li>
+        </ul>
+      </div>
+      <div class="title_section mb-5">
+        <div class="flex flex-1 border-2 px-2 rounded-lg">
+          <input
+            type="text"
+            class="w-[90%] px-3 outline-none text-lg"
+            placeholder="格式化标题"
+          />
+          <button
+            class="mdui-ripple mdui-ripple-deep-purple my-5 rounded-lg py-2 px-4 bg-blue-700 text-white transition duration-400 hover:-translate-y-1"
+          >
+            标题格式化
+          </button>
+        </div>
+        <br />
+        <section class="countrys">
+          <input type="radio" name="country" class="english" checked /> 英国
+          <input type="radio" name="country" class="franch" /> 法国
+          <input type="radio" name="country" class="germany" /> 德国
+          <input type="radio" name="country" class="italy" /> 意大利
+          <input type="radio" name="country" class="spanish" /> 西班牙
+        </section>
+        <br />
+      </div>
+      <div class="relative mb-3">
+        <textarea
+          name=""
+          class="border-2 text-lg outline-none rounded-lg p-5 w-full h-[300px]"
+          id=""
+          cols="30"
+          rows="10"
+          v-model.lazy="input.BulletPoint"
+          placeholder="格式化5点，请在这里输入"
+        ></textarea>
+        <!-- <span class="absolute right-[30px] bottom-[20px]">最多支持5点</span> -->
+        <button
+          class="mdui-ripple rounded-lg py-2 px-4 bg-gray-50 absolute right-[30px] bottom-[20px]"
+          @click="Click"
+        >
+          <i class="mdui-icon material-icons">format_align_center</i>
+          格式化5点描述
+        </button>
+      </div>
+
+      <span v-text="tips"></span>
+
+      <table class="mt-5">
+        <tr v-for="item of BulletPoint">
+          <td class="py-2 border-b-2 border-b-gray-50">{{ item }}</td>
+        </tr>
+      </table>
+    </div>
+    {% endraw %}
+  </body>
+</html>
+
+<script>
+  new Vue({
+    el: "#root",
+    data: {
+      input: {
+        BulletPoint: "",
+      },
+      titleFormat: {
+        english: ["A", "And", "Or"],
+        franch: [],
+        germany: [],
+        italy: [],
+        spanish: [],
+      },
+      BulletPoint: [],
+      tips: "",
+    },
+    methods: {
+      Click() {
+        this.tips = "";
+        this.input.BulletPoint = this.input.BulletPoint.replace("\n\n", "\n");
+        BulletPoint = this.input.BulletPoint.split("\n");
+        if (BulletPoint.length > 5) this.tips += "请注意: 大于5点\t";
+
+        for (let i = 0; i < BulletPoint.length; i++) {
+          BulletPoint[i] = BulletPoint[i].replace("：", ":");
+          let splitStr = BulletPoint[i].indexOf(":");
+          if (splitStr != -1) {
+            let title = BulletPoint[i].substr(0, splitStr);
+            let content = BulletPoint[i]
+              .substr(splitStr + 1, BulletPoint[i].length)
+              .trim();
+
+            content =
+              content[0].toUpperCase() + content.substr(1, content.length);
+            console.log(content[0].toUpperCase());
+            title = this.titleCase(title);
+
+            BulletPoint[i] = title + ": " + content;
+            if (BulletPoint[i].length >= 450)
+              tips +=
+                "注意第" + i + 1 + "条长度超过450个字符，可能会引起长度报错\t";
+          } else {
+            BulletPoint[i] =
+              BulletPoint[i][0].toUpperCase() +
+              BulletPoint[i].substr(1, BulletPoint[i].length);
+          }
+        }
+
+        this.BulletPoint = BulletPoint;
+      },
+      titleCase(s) {
+        return s.toLowerCase().replace(/\b([\w|‘]+)\b/g, function (word) {
+          //return word.slice(0, 1).toUpperCase() + word.slice(1);
+          return word.replace(word.charAt(0), word.charAt(0).toUpperCase());
+        });
+      },
+    },
+  });
+</script>
